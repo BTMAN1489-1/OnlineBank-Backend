@@ -73,10 +73,10 @@ class CurrencyConverter:
         if from_ != to:
             currencies = CurrencyParser.get_currency_prices()
             if from_ != 'RUB':
-                amount = amount * Decimal.from_float(currencies[from_]['SalePrice'] / currencies[from_]['Nominal'])
+                amount = amount * Decimal.from_float(currencies[from_]['PurchasePrice'] / currencies[from_]['Nominal'])
 
             if to != 'RUB':
-                amount = amount * Decimal.from_float(currencies[to]['Nominal']/currencies[to]['SalePrice'])
+                amount = amount * Decimal.from_float(currencies[to]['Nominal']/currencies[to]['PurchasePrice'])
 
         return amount
 

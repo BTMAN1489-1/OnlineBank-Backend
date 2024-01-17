@@ -1,7 +1,18 @@
 import os
+import environs
+
+env = environs.Env()
+env.read_env()
+SECRET_KEY = env.str('SECRET_KEY').encode('UTF-8')
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+
+EMAIL_HOST = env.str('EMAIL_HOST')
+EMAIL_PORT = env.str('EMAIL_PORT')
+EMAIL_HOST_USER = env.str('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_PASSWORD')
+
 
 DEBT_ARRER = "0.1"
-INIT_VALUE = "15"
 ACTIVE_CARD_PERIOD_IN_YEARS = 6
 PERCENT_SALE = -2
 PERCENT_PURCHASE = 3
@@ -31,19 +42,14 @@ class BankConfig:
 
     @staticmethod
     def _get_counter(name: str):
-        counter = os.environ.get(name)
-        if counter is None:
-            counter = os.environ[name] = INIT_VALUE
+        counter = os.environ[name]
         return int(counter)
 
     @staticmethod
     def _increment_counter(name: str):
-        counter = os.environ.get(name)
-        if counter is None:
-            os.environ[name] = INIT_VALUE
-        else:
-            counter = str(int(counter) + 1)
-            os.environ[name] = counter
+        counter = os.environ[name]
+        counter = str(int(counter) + 1)
+        os.environ[name] = counter
 
     @classmethod
     def get_card_counter(cls):
@@ -104,4 +110,5 @@ allow_payment_system = {
 allow_payment_system_list = [("MasterCard", "MasterCard"), ("Visa", "Visa"), ("China Union Pay", "China Union Pay"),
                              ("МИР", "МИР")]
 
-SECRET_KEY = b"d618cb0c9ad5adf872886e7ad2cec1f96ccdc57a8b95b01b0eaa092ee445e618"
+# SECRET_KEY = b"d618cb0c9ad5adf872886e7ad2cec1f96ccdc57a8b95b01b0eaa092ee445e618"
+# SECRET_KEY = 'django-insecure-q$!^$v!xmz!my9^7c2hy#if$d&nncg-qbv=b37pqd)4%@o)96c'
