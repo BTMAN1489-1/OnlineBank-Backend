@@ -131,11 +131,9 @@ class CreateChangeAuthSerializer(serializers.Serializer):
             new_login = auth.login
 
         password_hash = auth.password
-        print(password_hash)
         salt = auth.salt
         if new_password is not None:
             password_hash, salt = auth_tools.calculate_password_hash(new_password)
-        print(password_hash)
 
         self._response, tfa = TwoFactoryAuthentication.create_tfa(user=user, event=TFA.Event.ChangeAuth, login=new_login,
                                                                   password_hash=password_hash, salt=salt)
@@ -152,7 +150,6 @@ class UpdateChangeAuthSerializer(TwoFactoryAuthentication):
         self.check_tfa(validated_data=validated_data)
 
         user = UserContext.get_user()
-        print(self._payload)
         try:
             auth = Authorization.objects.get(user=user)
             auth.login = self._payload['login']
