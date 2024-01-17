@@ -109,6 +109,3 @@ allow_payment_system = {
 
 allow_payment_system_list = [("MasterCard", "MasterCard"), ("Visa", "Visa"), ("China Union Pay", "China Union Pay"),
                              ("МИР", "МИР")]
-
-# SECRET_KEY = b"d618cb0c9ad5adf872886e7ad2cec1f96ccdc57a8b95b01b0eaa092ee445e618"
-# SECRET_KEY = 'django-insecure-q$!^$v!xmz!my9^7c2hy#if$d&nncg-qbv=b37pqd)4%@o)96c'

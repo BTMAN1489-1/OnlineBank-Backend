@@ -1,0 +1,12 @@
+Procfile
+runtime.txt
+# Byte-compiled / optimized / DLL files
+__pycache__/
+.gitignore
+.git
+.venv
+env/
+backend/venv/
+venv
+__pypackages__/
+.idea/*
