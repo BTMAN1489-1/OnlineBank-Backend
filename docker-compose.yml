@@ -4,8 +4,12 @@ services:
 
   api_server:
     container_name: api_server
-    build: ./backend
+    build:
+      context: ./backend
+      network: host
     restart: unless-stopped
+    ports:
+      - 8000:8000
     environment:
       - CARD_COUNTER=1
       - ACCOUNT_COUNTER=1
@@ -17,7 +21,6 @@ services:
       postgres_net:
     depends_on:
       - postgresql
-      - nginx
     command: python3 online_bank/manage.py runserver 0.0.0.0:8000
 
   adminer:
@@ -25,7 +28,6 @@ services:
     restart: always
     networks:
       postgres_net:
-      nginx_net:
     ports:
       - 8080:8080
 
@@ -34,31 +36,15 @@ services:
     image: postgres
     restart: always
     networks:
-      nginx_net:
       postgres_net:
     volumes:
       - data-volume:/var/lib/postgresql:ro
     env_file:
-      -.env.db
-      
-  nginx:
-    container_name: nginx
-    image: nginx
-    restart: unless-stopped
-    networks:
-      nginx_net:
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+      - .env.db
 
 networks:
   postgres_net:
     name: postgres_net
-  nginx_net:
-    name: nginx_net
 
 volumes:
   data-volume:

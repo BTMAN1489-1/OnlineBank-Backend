@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from config import SECRET_KEY, ALLOWED_HOSTS, EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD
 
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = SECRET_KEY.decode('UTF-8')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ALLOWED_HOSTS
 
@@ -77,9 +77,11 @@ WSGI_APPLICATION = 'online_bank.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "service": "bank_service",
-        },
+        'NAME': os.environ['PGDATABASE'],
+        'USER': os.environ['PGUSER'],
+        'PASSWORD': os.environ['PGPASSWORD'],
+        'HOST': os.environ['PGHOST'],
+        'PORT': os.environ['PGPORT'],
     }
 }
 
