@@ -7,9 +7,9 @@ services:
     build: ./backend
     restart: unless-stopped
     environment:
-      - CARD_COUNTER=1
-      - ACCOUNT_COUNTER=1
-      - CONTRACT_COUNTER=1
+      - CARD_COUNTER=$(CARD_COUNTER)
+      - ACCOUNT_COUNTER=$(ACCOUNT_COUNTER)
+      - CONTRACT_COUNTER=$(CONTRACT_COUNTER)
 
     env_file:
       - ./backend/.env
