@@ -7,6 +7,7 @@ from utils import custom_validators
 from django.db import transaction, models
 from utils import UserContext, CurrencyConverter
 from decimal import Decimal
+from ..exceptions import NotFoundException, BadEnterException, FailedOperationException
 
 
 def check_balance(account: Account, amount_money):
@@ -49,7 +50,7 @@ class CreateTransferMoneySerializer(serializers.Serializer):
         account_recv = attrs.get("account_recv", None)
         card_number_recv = attrs.get("card_number_recv", None)
         if not (account_recv or card_number_recv) or account_recv and card_number_recv:
-            raise exceptions.ValidationError("Необходимо указать либо номер счета, либо карту получателя")
+            raise BadEnterException("Необходимо указать либо номер счета, либо карту получателя")
 
         return attrs
 
@@ -68,16 +69,16 @@ class CreateTransferMoneySerializer(serializers.Serializer):
             if token_card_send is not None:
                 card_send_obj = Card.objects.get(token_card=token_card_send, account=account_send_obj)
                 if not card_send_obj.is_activated:
-                    raise exceptions.ValidationError("Карта отправителя заблокирована")
+                    raise FailedOperationException("Карта отправителя заблокирована")
 
                 token_card_send = card_send_obj.card_number
 
         except (Account.DoesNotExist, Card.DoesNotExist):
-            raise exceptions.ValidationError("Неверные реквизиты отправителя")
+            raise FailedOperationException("Неверные реквизиты отправителя")
 
         has_money = check_balance(account_send_obj, amount_money)
         if not has_money:
-            raise exceptions.ValidationError("Недостаточно средств на счете отправителя.")
+            raise FailedOperationException("Недостаточно средств на счете отправителя.")
 
         description = {
             "From": {
@@ -116,7 +117,7 @@ class UpdateTransferMoneySerializer(TwoFactoryAuthentication):
         try:
             operation = Operation.objects.get(operation_id=self._payload['operation_id'])
         except Operation.DoesNotExist:
-            raise exceptions.ValidationError("Незарегистрированная операция.")
+            raise NotFoundException("Незарегистрированная операция.")
 
         try:
 
@@ -131,7 +132,7 @@ class UpdateTransferMoneySerializer(TwoFactoryAuthentication):
 
             has_money = check_balance(account_send_obj, amount_money)
             if not has_money:
-                raise exceptions.ValidationError("Недостаточно средств на счете отправителя.")
+                raise FailedOperationException("Недостаточно средств на счете отправителя.")
 
             with transaction.atomic():
                 account_send_obj.balance = models.F("balance") - amount_money
@@ -152,7 +153,7 @@ class UpdateTransferMoneySerializer(TwoFactoryAuthentication):
                     if card_recv_obj.exists():
                         card_recv_obj = card_recv_obj[0]
                         if not card_recv_obj.is_activated:
-                            raise exceptions.ValidationError("Карта получателя заблокирована")
+                            raise FailedOperationException("Карта получателя заблокирована")
                         account_recv_obj = card_recv_obj.account
                         amount = CurrencyConverter.convert(amount_money, account_send_obj.currency,
                                                            account_recv_obj.currency)
@@ -163,9 +164,9 @@ class UpdateTransferMoneySerializer(TwoFactoryAuthentication):
 
                 account_send_obj.save()
 
-        except exceptions.ValidationError as ex:
+        except exceptions.APIException:
             Operation.end_operation(operation, status=Operation.Status.FAILED)
-            raise ex
+            raise FailedOperationException("Ошибка при выполнении операции")
 
         except Exception as ex:
             logging.exception(ex)

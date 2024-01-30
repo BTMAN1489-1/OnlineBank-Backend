@@ -1,10 +1,10 @@
 from django.db import IntegrityError
 from rest_framework import serializers
-from rest_framework import exceptions
 import config
 from main_app.models import Authorization, Session, TFA
 from main_app.serializers import TwoFactoryAuthentication
 from utils import auth_tools, custom_validators, algorithms, UserContext
+from ..exceptions import NotFoundException, BadEnterException, PermissionDenied
 
 
 class CreateAuthorizationSerializer(serializers.Serializer):
@@ -21,14 +21,14 @@ class CreateAuthorizationSerializer(serializers.Serializer):
 
         except Authorization.DoesNotExist:
 
-            raise exceptions.ValidationError(f'Пользователя с логином {login} не существует')
+            raise NotFoundException(f'Пользователя с логином {login} не существует')
 
         verified = auth_tools.verify_passwords(auth.password, auth.salt, row_password)
         if verified:
             self._response, tfa = TwoFactoryAuthentication.create_tfa(user=auth.user, event=TFA.Event.Authorization)
             return tfa
 
-        raise exceptions.ValidationError('Неправильно введенные данные.')
+        raise BadEnterException('Неправильно введенны данные аутентификации.')
 
     def get_response(self):
         return self._response
@@ -65,13 +65,12 @@ class UpdateJWTSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         refresh_token = validated_data['refresh_token']
-        error_msg = 'Недействительный токен.'
         try:
 
             session = Session.objects.get(api_id=self._payload["uuid"])
 
         except Session.DoesNotExist:
-            raise exceptions.ValidationError(error_msg)
+            raise NotFoundException('Указанный токен не существует')
 
         if auth_tools.compare_digest(session.refresh_token, refresh_token):
             access_token, refresh_token = Session.update_session(session)
@@ -83,7 +82,7 @@ class UpdateJWTSerializer(serializers.Serializer):
             }
             return session
 
-        raise exceptions.ValidationError(error_msg)
+        raise PermissionDenied('Недействительный токен обновления')
 
     def get_response(self):
         return self._response
@@ -99,14 +98,14 @@ class CreateChangeAuthSerializer(serializers.Serializer):
     @staticmethod
     def check_password(password, re_password):
         if password != re_password:
-            raise exceptions.ValidationError("Поле password и поле re_password должны совпадать.")
+            raise BadEnterException("Поле password и поле re_password должны совпадать.")
 
     def validate(self, attrs):
         login = attrs.get("new_login", None)
         password = attrs.get("password", None)
         re_password = attrs.get("re_password", None)
         if not (login or (password and re_password)):
-            raise exceptions.ValidationError("Необходимо указать новый логин или новый пароль.")
+            raise BadEnterException("Необходимо указать новый логин или новый пароль.")
         if password is not None:
             self.check_password(password, re_password)
         return attrs
@@ -121,12 +120,12 @@ class CreateChangeAuthSerializer(serializers.Serializer):
 
         except Authorization.DoesNotExist:
 
-            raise exceptions.ValidationError("Вы не клиент нашего банка")
+            raise NotFoundException("Вы не клиент нашего банка")
 
         if new_login is not None:
             has_login = Authorization.objects.filter(login=new_login).all().exists()
             if has_login:
-                raise exceptions.ValidationError(f"{new_login} уже занят.")
+                raise BadEnterException(f"{new_login} уже занят.")
         else:
             new_login = auth.login
 
@@ -157,7 +156,7 @@ class UpdateChangeAuthSerializer(TwoFactoryAuthentication):
             auth.salt = self._payload['salt']
             auth.save()
         except (IntegrityError, Authorization.DoesNotExist):
-            raise exceptions.ValidationError(f"{self._payload['login']} уже занят")
+            raise BadEnterException(f"{self._payload['login']} уже занят")
 
         self._response = {
             "status": "success"

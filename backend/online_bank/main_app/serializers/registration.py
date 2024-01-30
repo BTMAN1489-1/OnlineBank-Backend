@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from rest_framework import exceptions
 from main_app.models import TFA
 import config
 from .TFA import TwoFactoryAuthentication
 from main_app.models import Account, Authorization, Session
 from utils import custom_validators, auth_tools
 from django.db import IntegrityError, transaction
+from ..exceptions import NotFoundException, BadEnterException
 
 
 class CreateRegistrationSerializer(serializers.Serializer):
@@ -17,7 +17,7 @@ class CreateRegistrationSerializer(serializers.Serializer):
 
     def validate_password(self, password):
         if password != self.initial_data['re_password']:
-            raise exceptions.ValidationError("Поле password и поле re_password должны совпадать.")
+            raise BadEnterException("Поле password и поле re_password должны совпадать.")
         return password
 
     def validate_account(self, account):
@@ -27,7 +27,7 @@ class CreateRegistrationSerializer(serializers.Serializer):
     def validate_login(self, login):
         has_login = Authorization.objects.filter(login=login).exists()
         if has_login:
-            raise exceptions.ValidationError(f"{login} уже занат.")
+            raise BadEnterException(f"{login} уже занат.")
         return login
 
     def create(self, validated_data):
@@ -37,12 +37,12 @@ class CreateRegistrationSerializer(serializers.Serializer):
 
         except Account.DoesNotExist:
 
-            raise exceptions.ValidationError("Данный счет не принадлежит нашему банку.")
+            raise NotFoundException("Данный счет не принадлежит нашему банку.")
 
         user = account.user
         has_auth = Authorization.objects.filter(user_id=user.pk).exists()
         if has_auth:
-            raise exceptions.ValidationError("Вы уже зарегистрированы")
+            raise BadEnterException("Вы уже зарегистрированы")
 
         password_hash, salt = auth_tools.calculate_password_hash(validated_data['password'])
         login = validated_data['login']
@@ -70,7 +70,7 @@ class UpdateRegistrationSerializer(TwoFactoryAuthentication):
                     user=user
                 )
             except IntegrityError:
-                raise exceptions.ValidationError(f"{self._payload['login']} уже занят")
+                raise BadEnterException(f"{self._payload['login']} уже занят")
 
             access_token, refresh_token = Session.create_session(user)
             self._response = {

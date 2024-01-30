@@ -1,6 +1,3 @@
-import base64
-import binascii
-
 from django.core.exceptions import ValidationError as ModelError
 from rest_framework.exceptions import ValidationError as APIError
 

@@ -1,7 +1,8 @@
-from rest_framework import serializers, exceptions
+from rest_framework import serializers
 from utils import UserContext, custom_validators
 from ..models import Card, Account
 from config import allow_payment_system_list
+from ..exceptions import NotFoundException
 
 
 class CardInfoSerializer(serializers.ModelSerializer):
@@ -46,11 +47,10 @@ class CreateCardSerializer(serializers.Serializer):
         try:
             account = Account.objects.get(account_number=validated_data['account'], user=user)
         except Account.DoesNotExist:
-            raise exceptions.ValidationError("Недействительнный номер счета")
+            raise NotFoundException(f"У пользователя '{user}' нет указанного счета.")
 
         card = Card.create_card(account, payment_system=validated_data["payment_system"])
         card.save()
-        card_number = card.card_number
         self._response = {
             "account_number": account.account_number,
             "type_account": account.type_account,
@@ -78,7 +78,7 @@ class BlockCardSerializer(serializers.Serializer):
         try:
             card = Card.objects.get(account__user=user, token_card=validated_data["token_card"])
         except Card.DoesNotExist:
-            raise exceptions.ValidationError("Недействительнный токен карты")
+            raise NotFoundException(f"У пользователя '{user}' нет указанной карты.")
 
         card.is_activated = validated_data['is_activated']
         card.save()

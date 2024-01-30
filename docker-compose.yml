@@ -2,6 +2,26 @@ version: '3.9'
 
 services:
 
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      postgres_net:
+    ports:
+      - 8080:8080
+
+  postgresql:
+    container_name: postgresql
+    image: postgres
+    restart: always
+    networks:
+      postgres_net:
+    volumes:
+      - data-volume:/var/lib/postgresql:ro
+    env_file:
+      - .env.db
+
+
   api_server:
     container_name: api_server
     build:
@@ -23,24 +43,6 @@ services:
       - postgresql
     command: python3 online_bank/manage.py runserver 0.0.0.0:8000
 
-  adminer:
-    image: adminer
-    restart: always
-    networks:
-      postgres_net:
-    ports:
-      - 8080:8080
-
-  postgresql:
-    container_name: postgresql
-    image: postgres
-    restart: always
-    networks:
-      postgres_net:
-    volumes:
-      - data-volume:/var/lib/postgresql:ro
-    env_file:
-      - .env.db
 
 networks:
   postgres_net:

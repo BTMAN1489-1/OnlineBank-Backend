@@ -3,30 +3,25 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError as APIError
 from ..models import Account
 from .. import serializers
-from . import FilterMixin, JWTAuthenticationAPIView
+from . import JWTAuthenticationAPIView
 from rest_framework.views import APIView
+from ..filters import AccountInfoFilter
 
 
-class AccountInfoAPIView(JWTAuthenticationAPIView, FilterMixin):
+class AccountInfoAPIView(JWTAuthenticationAPIView):
 
     def get(self, request):
-        try:
-            user = request.user
-            filter_dict = self.filter(request, (('account_number', 'account_number'), ('type_account', 'type_account'),
-                                                ('currency', 'currency')))
-            accounts = Account.objects.filter(user=user, **filter_dict).all()
-            return Response(serializers.AccountInfoSerializer(accounts, many=True).data)
-        except ModelError:
-            raise APIError("Неверные параметры запроса")
+        user = request.user
+        filter_ = AccountInfoFilter.filter(request.GET)
+        accounts = Account.objects.filter(user=user, **filter_).all()
+        return Response(serializers.AccountInfoSerializer(accounts, many=True).data)
 
 
 class HasAccountAPIView(APIView):
 
     def get(self, request):
-        account = request.GET.get('account_number', None)
-        if account is None:
-            raise APIError('Required parameter account_number')
-        res = Account.objects.filter(account_number=account).exists()
+        account_number = request.GET.get('account_number', None)
+        res = Account.objects.filter(account_number=account_number).exists()
         return Response({"has_account": res})
 
 

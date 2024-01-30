@@ -1,10 +1,10 @@
-import base64
 import uuid
 from datetime import datetime, timedelta
-from rest_framework import serializers, exceptions
+from rest_framework import serializers
 import config
 from main_app.models import TFA, User
 from utils import auth_tools, algorithms, message_tools, custom_validators
+from ..exceptions import NotFoundException, AuthenticationFailed
 
 
 class TwoFactoryAuthentication(serializers.Serializer):
@@ -18,7 +18,7 @@ class TwoFactoryAuthentication(serializers.Serializer):
     @classmethod
     def verify_event(cls, event: str):
         if event != cls._event:
-            raise exceptions.ValidationError("Неверный TFA токен.")
+            raise AuthenticationFailed("Неверный TFA токен.")
 
     def validate_tfa_token(self, tfa_token: str):
         binary_data, token = custom_validators.validate_token(tfa_token, is_api=True)
@@ -58,16 +58,15 @@ class TwoFactoryAuthentication(serializers.Serializer):
         try:
             tfa = TFA.objects.get(tfa_id=self._payload["uuid"])
         except TFA.DoesNotExist:
-            raise exceptions.ValidationError("Незарегистрированый TFA токен")
+            raise NotFoundException("Незарегистрированый TFA токен")
 
         if tfa.expired_datetime_code < current_datetime:
-            raise exceptions.ValidationError("Отправленный код подверждения просрочен")
+            raise AuthenticationFailed("Отправленный код подверждения просрочен")
 
         if tfa.confirm_code != validated_data['confirm_code']:
-            raise exceptions.ValidationError("Неверный код подверждения")
+            raise AuthenticationFailed("Неверный код подверждения")
         user = tfa.user
         tfa.delete()
-        tfa.save()
         return user
 
     def create(self, validated_data):

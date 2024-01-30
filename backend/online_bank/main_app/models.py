@@ -184,7 +184,6 @@ class TFA(models.Model):
     tfa_id = models.CharField(primary_key=True)
     confirm_code = models.CharField()
     expired_datetime_code = models.DateTimeField()
-    event = models.CharField(choices=Event.choices)
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user_tfa')
 
 

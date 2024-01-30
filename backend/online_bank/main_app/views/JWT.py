@@ -8,18 +8,6 @@ class JWTAuthenticationAPIView(APIView):
     authentication_classes = (JWTAuthentication,)
 
 
-class FilterMixin:
-    def filter(self, request, filter_fields):
-        filter_dict = {}
-        for key, field in filter_fields:
-            value = request.GET.get(field, None)
-            if value is None:
-                continue
-            filter_dict.update({key: value})
-
-        return filter_dict
-
-
 class UpdateJWTAPIView(APIView):
 
     def post(self, request):

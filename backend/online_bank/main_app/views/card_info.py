@@ -1,23 +1,16 @@
-from django.core.exceptions import ValidationError as ModelError
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError as APIError
 from ..models import Card
 from .. import serializers
-from . import FilterMixin, JWTAuthenticationAPIView
+from . import JWTAuthenticationAPIView
+from ..filters import CardInfoFilter
 
 
-class CardInfoAPIView(JWTAuthenticationAPIView, FilterMixin):
+class CardInfoAPIView(JWTAuthenticationAPIView):
     def get(self, request):
-        try:
-            user = request.user
-            filter_dict = self.filter(request, (('token_card', 'token_card'), ('is_activated', 'is_activated'),
-                                                ('payment_system', 'payment_system'),
-                                                ('account__account_number', 'account_number'), ('account__type_account', 'type_account'),
-                                                ('account__currency', 'currency')))
-            cards = Card.objects.filter(account__user=user, **filter_dict).select_related("account").all()
-            return Response(serializers.CardInfoSerializer(cards, many=True).data)
-        except ModelError:
-            raise APIError("Неверные параметры запроса")
+        user = request.user
+        filter_ = CardInfoFilter.filter(request.GET)
+        cards = Card.objects.filter(account__user=user, **filter_).select_related("account").all()
+        return Response(serializers.CardInfoSerializer(cards, many=True).data)
 
 
 class CreateCardAPIView(JWTAuthenticationAPIView):

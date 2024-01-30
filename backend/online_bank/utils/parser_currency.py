@@ -28,7 +28,7 @@ class CurrencyParser:
 
     @classmethod
     def read(cls):
-        with open(r"currencies.js", "rb") as fp:
+        with open(r"online_bank/currencies.js", "rb") as fp:
             cls._json_row = json.load(fp)
         cls._update_expired_date()
         return cls
