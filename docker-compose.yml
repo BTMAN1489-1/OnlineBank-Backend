@@ -28,8 +28,6 @@ services:
       context: ./backend
       network: host
     restart: unless-stopped
-    ports:
-      - 8000:8000
     environment:
       - CARD_COUNTER=1
       - ACCOUNT_COUNTER=1
@@ -41,7 +39,23 @@ services:
       postgres_net:
     depends_on:
       - postgresql
+      - nginx
     command: python3 online_bank/manage.py runserver 0.0.0.0:8000
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: unless-stopped
+    networks:
+      bot_net:
+    volumes:
+      - /etc/ssl:/etc/ssl:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 80:80
+      - 443:443
+      - 8000:8000
+    command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
 
 networks:
