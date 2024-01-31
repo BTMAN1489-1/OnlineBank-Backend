@@ -32,7 +32,6 @@ services:
     restart: always
     volumes:
       - ./backend_static:/online_bank/static
-      - ./backend_static:/online_bank/static
       - ./backend/online_bank/main_app/migrations:/online_bank/main_app/migrations
       - ./currencies.js:/online_bank/currencies.js:ro
     env_file:
