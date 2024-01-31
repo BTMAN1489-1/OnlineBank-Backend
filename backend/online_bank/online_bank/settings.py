@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from config import (SECRET_KEY, ALLOWED_HOSTS, EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
                     CORS_ALLOWED_ORIGINS, CSRF_TRUSTED_ORIGINS)
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +30,10 @@ DEBUG = False
 ALLOWED_HOSTS = ALLOWED_HOSTS
 
 CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS
-# CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS
+CORS_ALLOW_HEADERS = ["access-control-allow-methods", "access-control-allow-origin", "accept", "referer", "accept-encoding", "Authorization", "content-type", "dnt", "origin",
+                      "user-agent", "x-csrftoken", "x-sessionid", "x-requested-with", "Sec-Ch-Ua", "Sec-Ch-Ua-Mobile", "Sec-Ch-Ua-Platform"]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
@@ -124,8 +127,8 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -148,4 +151,3 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True
-

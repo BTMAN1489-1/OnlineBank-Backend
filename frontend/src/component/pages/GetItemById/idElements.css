@@ -1,0 +1,26 @@
+.infor{
+    width: 55%;
+   height: 20%;
+    position: relative;
+    display: inline-block;
+}
+.descr{
+    padding: 2%;
+}
+.descr_txt{
+   padding: 1%;
+
+}
+.bl{
+    padding: 1%;
+    margin-top: 2%;
+    font-size: 18px;
+}
+.spec{
+    font-size: 20px;
+    color:grey
+}
+.abil{
+   padding: 3%;
+    width: 80%
+}

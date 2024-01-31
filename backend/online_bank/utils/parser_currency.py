@@ -3,6 +3,7 @@ import datetime
 from decimal import Decimal
 import copy
 import config
+import calendar
 
 
 class CurrencyParser:
@@ -19,7 +20,8 @@ class CurrencyParser:
     def _update_expired_date(cls):
         offset = datetime.timezone(datetime.timedelta(hours=config.OFFSET_TIMEZONE))
         now = datetime.datetime.now(offset)
-        cls._expired_datetime = now.replace(day=now.day + 1, hour=0, minute=0, second=0, microsecond=0)
+        _, ndays = calendar.monthrange(now.year, now.month)
+        cls._expired_datetime = now.replace(day=(now.day + 1) % ndays, hour=0, minute=0, second=0, microsecond=0)
 
     @staticmethod
     def _get_current_datetime():
@@ -76,7 +78,6 @@ class CurrencyConverter:
                 amount = amount * Decimal.from_float(currencies[from_]['PurchasePrice'] / currencies[from_]['Nominal'])
 
             if to != 'RUB':
-                amount = amount * Decimal.from_float(currencies[to]['Nominal']/currencies[to]['PurchasePrice'])
+                amount = amount * Decimal.from_float(currencies[to]['Nominal'] / currencies[to]['PurchasePrice'])
 
         return amount
-

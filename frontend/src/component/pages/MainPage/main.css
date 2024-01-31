@@ -1,0 +1,49 @@
+.main--action{
+    width: 44%;
+    height: 170px;
+    padding: 2%;
+     margin-top: 5%;
+    background: white;
+    border-radius: 22px;
+    box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.25);
+    transition:all 0.5s;
+}
+
+.action--block{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width:30%;
+    margin-left: 8%;
+    @media (max-width: 1000px) and (min-width: 750px){
+        width:  35%;
+    }
+
+}
+.main--action:hover{
+    transform: translateY(-8px);
+    transition:all 0.5s;
+    box-shadow: 0 5px 10px 4px rgba(0, 0, 0, 0.25);
+}
+.mainTitle{
+    margin-top: 25%;
+    margin-left: 2%;
+}
+.valute--main {
+    width: 30%;
+
+    display: inline-block;
+    background: white;
+    border-radius: 22px;
+    padding: 2%;
+    margin-left: 5%;
+    height: fit-content;
+
+}
+.valute--title{
+    min-width: 200px;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    /*margin-left: auto;*/
+}

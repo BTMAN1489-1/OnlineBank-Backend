@@ -1,0 +1,17 @@
+.page_char{
+    display: flex;
+    min-height: 100vh;
+    /*background: rgb(131,228,192);*/
+    /*position: relative;*/
+    width:99%;
+    padding-top: 5%;
+    padding-left: 3%;
+    padding-right: 1%;
+    min-width: 900px;
+    /*background: linear-gradient(0deg, rgba(131,228,192,1) 50%, rgba(158,206,251,1) 80%);*/
+    /*@media (max-width: 900px) {*/
+    /*    flex-direction: column;*/
+    /*    align-items: center;*/
+
+    /*}*/
+}

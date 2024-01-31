@@ -1,0 +1,19 @@
+.email__block{
+  margin-right: auto;
+    margin-left: auto;
+    width: 40%;
+  padding: 1% 1% 1% 2%;
+  height: 40%;
+    align-items: start;
+  @media (max-width: 400px) {
+    width: 90%;
+    z-index: 100;
+
+  }
+}
+.email-title{
+  margin-top: 2%;
+  width: 90%;
+  margin-left: 8%;
+
+}

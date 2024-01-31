@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from main_app.views import RegistrationAPIView, AuthorizationAPIView, UpdateJWTAPIView, ChangeAuthAPIView
 
@@ -27,5 +29,6 @@ urlpatterns = [
     path('auth/update_api_tokens/', UpdateJWTAPIView.as_view()),
     path('auth/change_auth/', ChangeAuthAPIView.as_view()),
 ]
+
 
 admin.site.site_header = 'Wordskills Bank'

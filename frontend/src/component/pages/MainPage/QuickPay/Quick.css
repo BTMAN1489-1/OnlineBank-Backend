@@ -1,0 +1,18 @@
+.quick--item{
+    font-size:18px;
+    justify-content: space-between;
+    padding: 2%;
+    height: 50px;
+    align-items: center;
+    margin-top: 2%;
+    border-bottom: 1px solid rgba(0,0,0, 0.25);
+}
+.quick--item:hover{
+    background-color: whitesmoke;
+}
+.quick--list{
+    padding: 5% 5% 4%;
+    margin-top: 10%;
+    width: 100%;
+
+}

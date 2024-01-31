@@ -31,7 +31,8 @@ services:
       network: host
     restart: always
     volumes:
-      - currencies.js:/online_bank/currencies.js:ro
+      - ./backend_static:/online_bank/static
+      - ./currencies.js:/online_bank/currencies.js:ro
     env_file:
       - ./backend/.env
     networks:
@@ -49,15 +50,30 @@ services:
     networks:
       nginx_net:
     volumes:
+      - ./backend_static:/online_bank/static
+      - ./frontend_static/build:/var/www/build
       - /etc/ssl/wordskillsbank.ru.crt:/etc/ssl/wordskillsbank.ru.crt:ro
       - /etc/ssl/wordskillsbank.ru.key:/etc/ssl/wordskillsbank.ru.key:ro
+      - /etc/ssl/ca.crt:/etc/ssl/ca.crt:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 80:80
       - 443:443
       - 8000:8000
       - 8080:8080
+    depends_on:
+      - frontend
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+
+    frontend:
+      container_name: frontend
+      build:
+        context: ./frontend
+        network: host
+      restart: always
+      volumes:
+        - ./frontend_static/build:/build
+      command: npm run build
 
 
 networks:

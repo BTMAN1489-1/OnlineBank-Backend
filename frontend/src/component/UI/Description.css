@@ -1,0 +1,14 @@
+.desc--content{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 3%;
+}
+.desc--title{
+    font-size: 20px;
+    font-weight: 600;
+}
+.desc--txt{
+    font-size: 18px;
+}

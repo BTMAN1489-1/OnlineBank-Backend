@@ -1,0 +1,15 @@
+.curTable{
+    width: 100%;
+    margin-top: 5%;
+    border-spacing: 8px 15px;
+    font-size: 18px;
+    align-items: center;
+}
+.TableTitle{
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.priceTab{
+   margin-left: 10px;
+}

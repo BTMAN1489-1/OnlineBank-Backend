@@ -1,0 +1,30 @@
+.cardholder{
+    justify-content: start;
+    width: 45%;
+    height: fit-content;
+    padding-left: 2%;
+}
+.cardFrom{
+    font-size: 20px;
+    margin-top: 2%;
+}
+
+.submition{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.access{
+    display: inline-block;
+    background: #FFFFFF;
+    width: 60%;
+    height: 70%;
+    border-radius: 22px;
+    font-size: 16px;
+    margin-top: 10%;
+    margin-left: 5%;
+    padding: 2%;
+    align-items: center;
+    text-align: center;
+}

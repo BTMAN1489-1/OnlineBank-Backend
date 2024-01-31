@@ -1,0 +1,18 @@
+.container{
+    width: 60%;
+    margin: 10% auto 5%;
+}
+.character{
+    background: white;
+    border: none;
+    box-shadow: 0px 7px 2px -4px rgba(0,0,0,20%);
+}
+.character--filled{
+    border:none;
+}
+.character--selected{
+    border:none;
+    color: black;
+    outline: none;
+    box-shadow: 0px 7px 2px -4px mediumaquamarine;
+}

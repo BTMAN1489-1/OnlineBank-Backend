@@ -1,0 +1,80 @@
+.valute__item{
+    border-radius: 16px;
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 2%;
+    padding: 3% 2% 3% 3%;
+    width: 100%;
+    justify-content: space-between;
+    height: 20%;
+    align-items: start;
+
+}
+.valute__item:hover{
+    background: whitesmoke;
+}
+.open_bill{
+    margin-top: 3%;
+    border:none;
+    background: none;
+    font-size: 22px;
+    color:grey;
+}
+.open_bill:hover{
+    cursor: pointer;
+    color:mediumaquamarine;
+}
+.val_list{
+    border-radius: 22px;
+    width: 90%;
+    margin-left: 3%;
+    /*min-width: 800px;*/
+    background: white;
+    padding: 1%;
+    display: flex;
+    flex-direction: column;
+    align-items:start;
+}
+.vall_bill{
+    margin-top: 3%;
+}
+.buy_val{
+    background: #FFFFFF;
+    padding: 2% 2% 3%;
+    font-size: 18px;
+    height: 70%;
+    width: 50%;
+    border-radius: 22px;
+}
+.valData{
+    padding: 2% 2% 2%;
+}
+.info{
+    display: flex;
+    flex-direction: column;
+}
+.buy__sell{
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+}
+.buy_v{
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    justify-content: space-around;
+
+}
+.button_v{
+    font-size: 18px;
+    border:none;
+    padding: 3%;
+    margin-right: 10px;
+    font-weight: 500;
+    border-radius: 16px;
+    background: aquamarine;
+}
+.button_v:hover{
+    background: mediumaquamarine;
+}

@@ -1,0 +1,58 @@
+.pay_main{
+    width: 50%;
+    padding: 2%;
+    height: 70%;
+
+}
+.pay_switch{
+    display: flex;
+    background-color:white;
+    border:none;
+    font-size: 18px;
+    height:40px;
+    color: grey;
+}
+.pay_switch:hover{
+    cursor: pointer;
+}
+.pay_btn{
+    padding: 2%;
+    margin-bottom: 2%;
+    margin-top: 2%;
+}
+.pay_input{
+    width: 100%;
+    font-size: 16px;
+    height: 40px;
+    margin-top: 4%;
+    border-radius: 12px;
+    text-align: left;
+    padding: 2%;
+}
+.service{
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    padding: 2%;
+}
+.paybtn{
+    margin-top: 8%;
+    height:50px;
+    width: 80%;
+    border: none;
+    background:  rgb(131,228,192);
+    font-size: 20px;
+    border-radius: 12px;
+}
+.pay_header{
+    margin-right: auto;
+    margin-left: 1%;
+    margin-top: 4%;
+}
+.pay_select{
+    margin-top: 2%;
+    border-radius: 12px;
+    width: 100%;
+    font-size: 16px;
+    height: 40px;
+}

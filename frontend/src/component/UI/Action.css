@@ -1,0 +1,25 @@
+.action{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width:100%;
+    padding: 2%;
+    margin-top: 3%;
+    border-radius: 22px;
+}
+.action:hover{
+    background: whitesmoke;
+    cursor: pointer;
+}
+.act_img{
+    float: left;
+    padding: 7px;
+    border-radius: 20%;
+    /*background: #F6F4F4;*/
+}
+.act_txt{
+    margin-bottom: 3%;
+    margin-left: 3%;
+    margin-top: 2%;
+    font-size: 20px;
+}

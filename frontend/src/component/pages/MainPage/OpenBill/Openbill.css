@@ -1,0 +1,55 @@
+.valute_select{
+    width: 120%;
+    height: 30px;
+    margin-left: 3%;
+    font-size: 16px;
+    border-radius: 10px;
+}
+.pay_sys{
+    width: 30%;
+    height: 30px;
+    font-size: 16px;
+    border-radius: 10px;
+    margin-top: 3%;
+}
+.pay_field{
+   padding-top: 4%;
+
+    padding-left: 2%;
+    width: 100%;
+    font-size: 18px;
+}
+.contract{
+    width: 40%;
+    height: 30%;
+    padding-left: 2%;
+
+    font-size: 20px;
+}
+.billData{
+    margin-left: 10px;
+    width: 95%;
+    margin-top: 2%;
+    margin-bottom: 4%;
+}
+.add_bill{
+    font-size: 20px;
+    /*width: 40%;*/
+    height: fit-content;
+    width:fit-content;
+    align-items: start;
+    /*height: 20%;*/
+}
+.add-title{
+    margin-top: 2%;
+    font-size: 22px;
+    margin-bottom: 4%;
+}
+.new_acc{
+    display: flex ;
+    height: fit-content;
+    width: 100%;
+    padding: 2% 2% 3%;
+    align-items: center;
+    justify-content: center;
+}
