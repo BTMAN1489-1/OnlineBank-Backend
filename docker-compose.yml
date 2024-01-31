@@ -19,7 +19,7 @@ services:
     networks:
       postgres_net:
     volumes:
-      - /var/lib/postgresql:/var/lib/postgresql
+      - /postgresql/mount:/var/lib/postgresql/data
     env_file:
       - .env.db
 
