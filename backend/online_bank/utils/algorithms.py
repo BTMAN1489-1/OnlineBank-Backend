@@ -3,7 +3,6 @@ from config import BankConfig, allow_currency_code, allow_payment_system
 import datetime
 import json
 import random
-import base64
 
 
 def lune_algorithm(arr_n: list[int], arr_k: list[int], length: int, weight: int = 0) -> int:

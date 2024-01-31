@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
-from config import SECRET_KEY, ALLOWED_HOSTS, EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, CORS_ALLOWED_ORIGINS
+from config import (SECRET_KEY, ALLOWED_HOSTS, EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD,
+                    CORS_ALLOWED_ORIGINS, CSRF_TRUSTED_ORIGINS)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,10 @@ SECRET_KEY = SECRET_KEY.decode('UTF-8')
 DEBUG = False
 
 ALLOWED_HOSTS = ALLOWED_HOSTS
+
+CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS
+# CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -120,6 +125,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -143,5 +149,3 @@ EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_USE_SSL = True
 
-
-CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS

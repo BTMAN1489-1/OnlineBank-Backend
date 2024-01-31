@@ -1,5 +1,7 @@
+import logging
 import os
 import environs
+
 
 env = environs.Env()
 env.read_env()
@@ -7,12 +9,12 @@ SECRET_KEY = env.str('SECRET_KEY').encode('UTF-8')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS')
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
 
 EMAIL_HOST = env.str('EMAIL_HOST')
 EMAIL_PORT = env.str('EMAIL_PORT')
 EMAIL_HOST_USER = env.str('EMAIL_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_PASSWORD')
-
 
 DEBT_ARRER = "0.1"
 ACTIVE_CARD_PERIOD_IN_YEARS = 6
@@ -25,6 +27,25 @@ INTERVAL_API_TOKEN_IN_SECONDS = 18000
 
 
 class BankConfig:
+    _CARD_COUNTER = None
+    _ACCOUNT_COUNTER = None
+    _CONTRACT_COUNTER = None
+
+    @classmethod
+    def init_counters(cls):
+        if cls._CARD_COUNTER is None or cls._ACCOUNT_COUNTER is None or cls._CONTRACT_COUNTER is None:
+            from django.db import DatabaseError
+            from main_app.models import Account, Card, Contract
+            try:
+                cls._ACCOUNT_COUNTER = Account.count_rows()
+                cls._CONTRACT_COUNTER = Contract.count_rows()
+                cls._CARD_COUNTER = Card.count_rows()
+            except DatabaseError as ex:
+                logging.exception(ex)
+                cls._ACCOUNT_COUNTER = 1
+                cls._CONTRACT_COUNTER = 1
+                cls._CARD_COUNTER = 1
+
     def __new__(cls, *args, **kwargs):
         return
 
@@ -42,40 +63,35 @@ class BankConfig:
             bin_ = os.environ["BIN"] = '59913'
         return bin_
 
-    @staticmethod
-    def _get_counter(name: str):
-        counter = os.environ[name]
-        return int(counter)
-
-    @staticmethod
-    def _increment_counter(name: str):
-        counter = os.environ[name]
-        counter = str(int(counter) + 1)
-        os.environ[name] = counter
-
     @classmethod
     def get_card_counter(cls):
-        return cls._get_counter('CARD_COUNTER')
+        cls.init_counters()
+        return cls._CARD_COUNTER
 
     @classmethod
     def get_account_counter(cls):
-        return cls._get_counter('ACCOUNT_COUNTER')
+        cls.init_counters()
+        return cls._ACCOUNT_COUNTER
 
     @classmethod
     def get_contract_counter(cls):
-        return cls._get_counter('CONTRACT_COUNTER')
+        cls.init_counters()
+        return cls._CONTRACT_COUNTER
 
     @classmethod
     def increment_card_counter(cls):
-        cls._increment_counter('CARD_COUNTER')
+        cls.init_counters()
+        cls._CARD_COUNTER += 1
 
     @classmethod
     def increment_account_counter(cls):
-        return cls._increment_counter('ACCOUNT_COUNTER')
+        cls.init_counters()
+        cls._ACCOUNT_COUNTER += 1
 
     @classmethod
     def increment_contract_counter(cls):
-        return cls._increment_counter('CONTRACT_COUNTER')
+        cls.init_counters()
+        cls._CONTRACT_COUNTER += 1
 
 
 allow_currency_code = {'RUB': '810', 'AUD': '036', 'AZN': '944', 'GBP': '826', 'AMD': '051', 'BYN': '933', 'BGN': '975',

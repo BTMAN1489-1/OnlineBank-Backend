@@ -5,6 +5,13 @@ from utils import custom_validators, algorithms, auth_tools
 import config
 
 
+class CountMixin:
+    @classmethod
+    def count_rows(cls):
+        count = cls.objects.count()
+        return count
+
+
 class User(models.Model):
     class Sex(models.TextChoices):
         MALE = 'male', 'Мужской'
@@ -31,7 +38,7 @@ class User(models.Model):
         verbose_name_plural = 'клиенты'
 
 
-class Account(models.Model):
+class Account(models.Model, CountMixin):
     class TypeAccount(models.TextChoices):
         CREDIT = 'credit', 'Кредитный'
         DEBIT = 'debit', 'Расcчётный'
@@ -61,7 +68,7 @@ class Account(models.Model):
                 f"{self.user.third_name.capitalize()}/{self.account_number}")
 
 
-class Contract(models.Model):
+class Contract(models.Model, CountMixin):
     contract_number = models.TextField(unique=True, verbose_name='Номер контракта')
     description = models.JSONField()
     account = models.OneToOneField('Account', on_delete=models.PROTECT, related_name='contract')
@@ -97,7 +104,7 @@ class Contract(models.Model):
         return f"{self.contract_number}"
 
 
-class Card(models.Model):
+class Card(models.Model, CountMixin):
     token_card = models.UUIDField(primary_key=True, default=uuid.uuid4)
     card_number = models.CharField(max_length=16, unique=True,
                                    validators=[custom_validators.validate_card_number], verbose_name='Номер карты')

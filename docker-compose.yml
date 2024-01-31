@@ -29,12 +29,9 @@ services:
     build:
       context: ./backend
       network: host
-    restart: unless-stopped
-    environment:
-      - CARD_COUNTER=1
-      - ACCOUNT_COUNTER=1
-      - CONTRACT_COUNTER=1
-
+    restart: always
+    volumes:
+      - currencies.js:/online_bank/currencies.js:ro
     env_file:
       - ./backend/.env
     networks:
@@ -48,7 +45,7 @@ services:
   nginx:
     container_name: nginx
     image: nginx
-    restart: unless-stopped
+    restart: always
     networks:
       nginx_net:
     volumes:
