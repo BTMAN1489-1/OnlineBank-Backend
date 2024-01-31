@@ -61,19 +61,16 @@ services:
       - 443:443
       - 8000:8000
       - 8080:8080
-    depends_on:
-      - frontend
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
-    frontend:
-      container_name: frontend
-      build:
-        context: ./frontend
-        network: host
-      restart: always
-      volumes:
-        - ./frontend_static/build:/build
-      command: npm run build
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      network: host
+    volumes:
+      - ./frontend_static/build:/build
+    command: npm run build
 
 
 networks:
