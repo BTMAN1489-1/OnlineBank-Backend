@@ -19,7 +19,7 @@ services:
     networks:
       postgres_net:
     volumes:
-      - data-volume:/var/lib/postgresql:ro
+      - /var/lib/postgresql:/var/lib/postgresql
     env_file:
       - .env.db
 
@@ -32,6 +32,8 @@ services:
     restart: always
     volumes:
       - ./backend_static:/online_bank/static
+      - ./backend_static:/online_bank/static
+      - ./backend/online_bank/main_app/migrations:/online_bank/main_app/migrations
       - ./currencies.js:/online_bank/currencies.js:ro
     env_file:
       - ./backend/.env
@@ -80,5 +82,3 @@ networks:
   nginx_net:
     name: nginx_net
 
-volumes:
-  data-volume:

@@ -58,8 +58,11 @@ const BuyValuta = ({valBills, sellBills, valBill,bill,  setError, setTfa, setSta
        <>
             <div className='vall_bill'>
                 <p>Выберите счет для списания</p>
-                {sellBills.length &&
-                    <BillSelect bills={sellBills} bill={bill} onChange={value => setBill(value)}/>}
+                {sellBills.length ?
+                    <BillSelect bills={sellBills} bill={bill} onChange={value => setBill(value)}/>
+                    :
+                    <p>У вас нет счета в рублях</p>
+                }
             </div>
             {valBills.length ?
                 <>

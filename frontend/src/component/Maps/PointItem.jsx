@@ -18,7 +18,7 @@ const PointItem = ({point, setPoint, coord}) => {
     }, [coord]);
     useEffect(() => {
         if(point.description.schedule[date] ==='Круглосуточно' ||
-            d.getHours()< point.description.schedule[date].slice(5,7)){
+            (d.getHours()>= point.description.schedule[date].slice(0,2) && d.getHours()< point.description.schedule[date].slice(5,7))){
             setIsWork('Открыто')
         }else {
             setIsWork('Закрыто')
